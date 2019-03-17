@@ -1,0 +1,52 @@
+start
+1WATER data collected 1552807211.0040479
+Traceback (most recent call last):
+  File "/home/pachpande.soham/anaconda3/lib/python3.7/site-packages/pycomm/cip/cip_base.py", line 420, in connect
+    self.sock.connect((host, port))
+socket.timeout: timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/pachpande.soham/anaconda3/lib/python3.7/site-packages/pycomm/cip/cip_base.py", line 843, in open
+    self.__sock.connect(ip_address, self.attribs['port'])
+  File "/home/pachpande.soham/anaconda3/lib/python3.7/site-packages/pycomm/cip/cip_base.py", line 422, in connect
+    raise CommError("Socket timeout during connection.")
+pycomm.cip.cip_base.CommError: Socket timeout during connection.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "water_data.py", line 44, in <module>
+    collect_cwps_data('10.0.111.14', t_)
+  File "water_data.py", line 16, in collect_cwps_data
+    if c1.open(ip):
+  File "/home/pachpande.soham/anaconda3/lib/python3.7/site-packages/pycomm/cip/cip_base.py", line 854, in open
+    raise CommError(e)
+pycomm.cip.cip_base.CommError: Socket timeout during connection.
+start
+1WATER data collected 1552807343.0569234
+Traceback (most recent call last):
+  File "/home/pachpande.soham/anaconda3/lib/python3.7/site-packages/pycomm/cip/cip_base.py", line 420, in connect
+    self.sock.connect((host, port))
+socket.timeout: timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/pachpande.soham/anaconda3/lib/python3.7/site-packages/pycomm/cip/cip_base.py", line 843, in open
+    self.__sock.connect(ip_address, self.attribs['port'])
+  File "/home/pachpande.soham/anaconda3/lib/python3.7/site-packages/pycomm/cip/cip_base.py", line 422, in connect
+    raise CommError("Socket timeout during connection.")
+pycomm.cip.cip_base.CommError: Socket timeout during connection.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "water_data.py", line 44, in <module>
+    collect_cwps_data('10.0.111.14', t_)
+  File "water_data.py", line 16, in collect_cwps_data
+    if c1.open(ip):
+  File "/home/pachpande.soham/anaconda3/lib/python3.7/site-packages/pycomm/cip/cip_base.py", line 854, in open
+    raise CommError(e)
+pycomm.cip.cip_base.CommError: Socket timeout during connection.
