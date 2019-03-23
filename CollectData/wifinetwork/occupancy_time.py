@@ -14,7 +14,9 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 conn = sqlite3.connect('occupancy_data.db')
 c = conn.cursor()
+
 c.execute('''CREATE TABLE IF NOT EXISTS occupancy(timeEpoch real,area varchar(10),building varchar(10),floor varchar(10) ,count int)''')
+c.execute('''CREATE TABLE IF NOT EXISTS occupancy_ap(timeEpoch real,area varchar(10),building varchar(10),floor varchar(10) ,ap varchar(10), count int)''')
 
 
 session = requests.Session()
@@ -43,11 +45,8 @@ def get_time_epoch_minute(minute_):
 
 def get_data(skip):
     params = {
-    # 'columns': 123319,
     'take': 100,
     'skip': skip,
-    # 'page': 0,
-    # 'pageSize': 500
     }
     data = session.get('https://10.1.0.10/data/client-table.html',headers=headers, params=params)
     data_json = json.loads(data.text)
@@ -60,9 +59,9 @@ def get_dataframe():
         data_json = get_data(skip)
         for client in data_json['data']:
             list_t = re.findall('[A-Z0-9]+',client['AP'])
-            if list_t[0]=='AC' or list_t[0]=='SH' or list_t[0]=='SFH':
-                string = list_t[1]+list_t[2]+list_t[-1]
-                data_n = data_n.append({'str':string,'area':list_t[0],'building':list_t[1],'floor':list_t[2],'room':list_t[-1]}, ignore_index=True)
+            # if list_t[0]=='AC' or list_t[0]=='SH' or list_t[0]=='SFH':
+            string = list_t[1]+list_t[2]+list_t[-1]
+            data_n = data_n.append({'str':string,'area':list_t[0],'building':list_t[1],'floor':list_t[2],'room':list_t[-1]}, ignore_index=True)
     return data_n
 
 def get_dataframe_count():
@@ -76,15 +75,17 @@ def get_occupancy_time(time_epoch):
     df_count = get_dataframe_count()
 
     all_loc_np = np.asarray(list(df_count.index))
-    all_loc_np = np.delete(all_loc_np,3,1)
+
+    # Delete AP name if not necessary
+    # all_loc_np = np.delete(all_loc_np,3,1)
 
     all_loc_unique_np = np.unique(all_loc_np, axis=0)
     # all_loc_unique_np[:5]
 
-    df_floor_occ = pd.DataFrame(columns=['timeEpoch','area','building','floor','count'])
+    df_floor_occ = pd.DataFrame(columns=['timeEpoch','area','building','floor','ap','count'])
     for loc_ in all_loc_unique_np:
         sum_ = df_count.loc[tuple(loc_[:])].sum()
-        df_floor_occ = df_floor_occ.append({'timeEpoch':time_epoch,'area':loc_[0],'building':loc_[1],'floor':loc_[2],'count':int(sum_)}, ignore_index=True)
+        df_floor_occ = df_floor_occ.append({'timeEpoch':time_epoch,'area':loc_[0],'building':loc_[1],'floor':loc_[2],'ap':loc_[3],'count':int(sum_)}, ignore_index=True)
 
     return df_floor_occ
 
@@ -106,8 +107,8 @@ if __name__ == "__main__":
         temp_df = get_occupancy_time(time_epoch)
         print('Hi from main', time_epoch)
         for row in temp_df.itertuples():
-            c.execute('''INSERT into occupancy VALUES(?,?,?,?,?)''',(int(row[1]),str(row[2]),str(row[3]),str(row[4]),int(row[5])))
-            # print(int(row[1]),str(row[2]),str(row[3]),str(row[4]),int(row[5]))
-#        temp_df.to_csv('network_data.csv',mode = 'a', header=False, index=False)
+            c.execute('''INSERT into occupancy_ap VALUES(?,?,?,?,?)''',(int(row[1]),str(row[2]),str(row[3]),str(row[4]),str(row[5]),int(row[6])))
+            # print(int(row[1]),str(row[2]),str(row[3]),str(row[4]),str(row[5]), int(row[6]))
+        # temp_df.to_csv('network_data.csv',mode = 'a', header=False, index=False)
         conn.commit()
         time.sleep(minute_interval*60)
