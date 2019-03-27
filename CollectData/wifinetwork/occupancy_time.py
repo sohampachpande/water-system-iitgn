@@ -107,7 +107,7 @@ if __name__ == "__main__":
         temp_df = get_occupancy_time(time_epoch)
         print('Hi from main', time_epoch)
         for row in temp_df.itertuples():
-            c.execute('''INSERT into occupancy_ap VALUES(?,?,?,?,?)''',(int(row[1]),str(row[2]),str(row[3]),str(row[4]),str(row[5]),int(row[6])))
+            c.execute('''INSERT into occupancy_ap VALUES(?,?,?,?,?,?)''',(int(row[1]),str(row[2]),str(row[3]),str(row[4]),str(row[5]),int(row[6])))
             # print(int(row[1]),str(row[2]),str(row[3]),str(row[4]),str(row[5]), int(row[6]))
         # temp_df.to_csv('network_data.csv',mode = 'a', header=False, index=False)
         conn.commit()
