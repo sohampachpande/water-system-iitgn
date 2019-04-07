@@ -35,12 +35,13 @@ def collect_wsc_data(ip, t_):
 
     conn.commit()
     # print("WSC data at time: {} added to db".format(t_))
-
+import sys
 if __name__ == "__main__":
     count = 0
     while(1):
         t_ = time.time()
         print('1WATER data collected {}'.format(t_))
+        sys.stdout.flush()
         collect_cwps_data('10.0.111.14', t_)
         collect_wsc_data('10.0.111.13', t_)
         time.sleep(2)

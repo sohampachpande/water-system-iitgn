@@ -258,4 +258,10 @@ Hi from main 1552822920.0
 2 NETWORK data added at 1552823040.0
 Hi from main 1552823040.0
 2 NETWORK data added at 1552823160.0
-Hi from main 1552823160.0
+Hi from main 1552823160.0start
+2 NETWORK data added at 1552841400.0
+Hi from main 1552841400.0
+Traceback (most recent call last):
+  File "occupancy_time.py", line 110, in <module>
+    c.execute('''INSERT into occupancy_ap VALUES(?,?,?,?,?)''',(int(row[1]),str(row[2]),str(row[3]),str(row[4]),str(row[5]),int(row[6])))
+sqlite3.OperationalError: table occupancy_ap has 6 columns but 5 values were supplied

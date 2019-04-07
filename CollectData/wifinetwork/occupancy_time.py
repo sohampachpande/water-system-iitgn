@@ -4,6 +4,7 @@ import numpy as np
 import datetime
 import time
 import sqlite3
+import traceback
 
 import requests
 import json
@@ -59,20 +60,31 @@ def get_dataframe():
         data_json = get_data(skip)
         for client in data_json['data']:
             list_t = re.findall('[A-Z0-9]+',client['AP'])
+            # print(list_t)
+            if len(list_t)<2:
+                continue
             # if list_t[0]=='AC' or list_t[0]=='SH' or list_t[0]=='SFH':
-            string = list_t[1]+list_t[2]+list_t[-1]
-            data_n = data_n.append({'str':string,'area':list_t[0],'building':list_t[1],'floor':list_t[2],'room':list_t[-1]}, ignore_index=True)
+            try:
+                string = list_t[0]+list_t[1]+list_t[-1]
+                data_n = data_n.append({'str':string,'area':list_t[0],'building':list_t[1],'floor':list_t[2],'ap':list_t[-1]}, ignore_index=True)
+            except:
+                print('In EXCEPT list_t', list_t)
+                data_n = -1
     return data_n
 
 def get_dataframe_count():
     data_n = get_dataframe()
-    data_count = data_n.groupby(['area','building','floor','room'])['str'].count()
+    if isinstance(data_n, pd.DataFrame)==False:
+        return -1
+    data_count = data_n.groupby(['area','building','floor','ap'])['str'].count()
     df_count = data_count.to_frame()
     return df_count
 
 
 def get_occupancy_time(time_epoch):
     df_count = get_dataframe_count()
+    if isinstance(df_count, pd.DataFrame)==False:
+        return -1
 
     all_loc_np = np.asarray(list(df_count.index))
 
@@ -89,26 +101,27 @@ def get_occupancy_time(time_epoch):
 
     return df_floor_occ
 
-def adddb_occupancy_data(time_epoch):
-    temp_df = get_occupancy_time(time_epoch)
-    for row in temp_df.itertuples():
-        c.execute('''INSERT into occupancy VALUES(?,?,?,?,?)''',(int(row[1]),str(row[2]),str(row[3]),str(row[4]),int(row[5])))
-    print("Occupancy at time {} added to db".format(time_epoch))
-
-
 
 print('start')
 
 if __name__ == "__main__":
     minute_interval = 2
     while(1):
-        time_epoch = get_time_epoch_minute(minute_interval)
-        print('2 NETWORK data added at {}'.format(time_epoch))
-        temp_df = get_occupancy_time(time_epoch)
-        print('Hi from main', time_epoch)
-        for row in temp_df.itertuples():
-            c.execute('''INSERT into occupancy_ap VALUES(?,?,?,?,?,?)''',(int(row[1]),str(row[2]),str(row[3]),str(row[4]),str(row[5]),int(row[6])))
-            # print(int(row[1]),str(row[2]),str(row[3]),str(row[4]),str(row[5]), int(row[6]))
-        # temp_df.to_csv('network_data.csv',mode = 'a', header=False, index=False)
-        conn.commit()
+        try:
+            time_epoch = get_time_epoch_minute(minute_interval)
+            print('2 NETWORK data added at {}'.format(time_epoch))
+            temp_df = get_occupancy_time(time_epoch)
+            if isinstance(temp_df, pd.DataFrame)==False:
+                continue
+            print('Hi from main', time_epoch)
+            for row in temp_df.itertuples():
+                print(int(row[1]),str(row[2]),str(row[3]),str(row[4]),str(row[5]),int(row[6]))
+                c.execute('''INSERT into occupancy_ap VALUES(?,?,?,?,?,?)''',(int(row[1]),str(row[2]),str(row[3]),str(row[4]),str(row[5]),int(row[6])))
+                # print(int(row[1]),str(row[2]),str(row[3]),str(row[4]),str(row[5]), int(row[6]))
+            # temp_df.to_csv('network_data.csv',mode = 'a', header=False, index=False)
+            conn.commit()
+        except Exception as e:
+            print("Error at time {}: \n {}\n".format(time_epoch,str(e)))
+            print(traceback.format_exc())
+            continue
         time.sleep(minute_interval*60)
