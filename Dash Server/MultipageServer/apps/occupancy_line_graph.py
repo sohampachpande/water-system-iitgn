@@ -8,9 +8,11 @@ import plotly.graph_objs as go
 from datetime import datetime as dt
 import time
 import sqlite3
+import pymysql
 
 
 def get_dbconn():
+    # cur = pymysql.connect("10.0.62.222","root","root","CampusData")
     cur = sqlite3.connect('occupancy_data.db')
     cur = cur.cursor()
     return cur
