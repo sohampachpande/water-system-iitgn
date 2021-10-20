@@ -136,6 +136,22 @@ def set_buildings_options(chosen_area):
         'SELECT DISTINCT building FROM occupancy WHERE area = "{}"'.format(
             chosen_area))
     available_building = np.asarray(cur.fetchall())[:, 0]
+    print(available_building)
+    return [{
+        'label': dict_building[i],
+        'value': i
+    } for i in available_building]
+
+@app.callback(
+    dash.dependencies.Output('line_building', 'options'),
+    [dash.dependencies.Input('line_area', 'value')])
+def set_buildings_options(chosen_area):
+    cur = get_dbconn()
+    cur.execute(
+        'SELECT DISTINCT building FROM occupancy WHERE area = "{}"'.format(
+            chosen_area))
+    available_building = np.asarray(cur.fetchall())[:, 0]
+    print(available_building)
     return [{
         'label': dict_building[i],
         'value': i
@@ -151,6 +167,7 @@ def set_floor_options(chosen_building):
         'SELECT DISTINCT floor FROM occupancy WHERE building = "{}"'.format(
             chosen_building))
     available_floor = np.asarray(cur.fetchall())[:, 0]
+    print(available_floor)
     return [{'label': i, 'value': i} for i in available_floor]
 
 
@@ -179,8 +196,13 @@ def update_graph(area, building, floor, date):
 
         np_time_count = np.asarray(cur.fetchall())
 
+        if len(np_time_count)<0 or np_time_count.shape[1]!=2:
+            return dash.no_update
+
         list_count = list(np_time_count[:, 1])
         list_time = list(map(epoch_timestring, list(np_time_count[:, 0])))
+
+        print(list_time, list_count)
 
         return {
             'data': [
@@ -205,6 +227,9 @@ def update_graph(area, building, floor, date):
                 height=700,
                 hovermode='closest')
         }
+
+    else:
+        return dash.no_update
 
 
 if __name__ == '__main__':
