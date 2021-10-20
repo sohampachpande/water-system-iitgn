@@ -147,6 +147,8 @@ def update_graph(station, flow_type, date):
                 .format(start_epoch, end_epoch))
             np_flow_wsc1_rw = np.asarray(cursor.fetchall())
 
+
+
         if station == 'all':
             list_time = list(map(epoch_timestring, list(np_flow_cwps[:, 0])))
             list_time = downsample(list_time, sampling_f)
@@ -273,6 +275,8 @@ def update_graph(station, flow_type, date):
                 }
 
         else:
+            # if np_flow.shape[0]==0 or np_flow.shape[1]!=2:
+            #     return dash.no_update
             list_time = list(map(epoch_timestring, list(np_flow[:, 0])))
             list_time = downsample(list_time, sampling_f)
             return {
@@ -313,7 +317,7 @@ def update_graph(station, flow_type, date):
                     hovermode='closest')
             }
     else:
-        dash.no_update
+        return dash.no_update
 
 
 if __name__ == '__main__':

@@ -136,7 +136,6 @@ def set_buildings_options(chosen_area):
         'SELECT DISTINCT building FROM occupancy WHERE area = "{}"'.format(
             chosen_area))
     available_building = np.asarray(cur.fetchall())[:, 0]
-    print(available_building)
     return [{
         'label': dict_building[i],
         'value': i
@@ -151,7 +150,6 @@ def set_buildings_options(chosen_area):
         'SELECT DISTINCT building FROM occupancy WHERE area = "{}"'.format(
             chosen_area))
     available_building = np.asarray(cur.fetchall())[:, 0]
-    print(available_building)
     return [{
         'label': dict_building[i],
         'value': i
@@ -167,7 +165,6 @@ def set_floor_options(chosen_building):
         'SELECT DISTINCT floor FROM occupancy WHERE building = "{}"'.format(
             chosen_building))
     available_floor = np.asarray(cur.fetchall())[:, 0]
-    print(available_floor)
     return [{'label': i, 'value': i} for i in available_floor]
 
 
