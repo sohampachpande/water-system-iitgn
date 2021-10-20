@@ -312,6 +312,8 @@ def update_graph(station, flow_type, date):
                     height=700,
                     hovermode='closest')
             }
+    else:
+        dash.no_update
 
 
 if __name__ == '__main__':

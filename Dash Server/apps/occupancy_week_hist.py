@@ -234,6 +234,8 @@ def update_graph(area, building, floor, start_date, end_date):
                 # height=700,
                 hovermode='closest')
         }
+    else:
+        return dash.no_update
 
 
 if __name__ == '__main__':

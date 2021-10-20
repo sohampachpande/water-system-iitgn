@@ -181,7 +181,6 @@ def set_floor_options(chosen_building):
 def update_graph(area, building, floor, date):
 
     if date is not None:
-        print(date)
         # date = dt.strptime(date, '%Y-%m-%d') #%H:%M:%S')
         # date_string = date.strftime('%Y-%m-%d')
 
@@ -201,8 +200,6 @@ def update_graph(area, building, floor, date):
 
         list_count = list(np_time_count[:, 1])
         list_time = list(map(epoch_timestring, list(np_time_count[:, 0])))
-
-        print(list_time, list_count)
 
         return {
             'data': [
