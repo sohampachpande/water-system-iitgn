@@ -53,7 +53,7 @@ def display_page(pathname):
         return occupancy_line_graph.layout
     elif pathname == '/OccupancyWeeklyHistogram':
         return occupancy_week_hist.layout
-    elif pathname == '/home':
+    elif pathname == '/home' or pathname=='/':
         return index_page
     else:
         return 404

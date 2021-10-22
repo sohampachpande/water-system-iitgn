@@ -77,7 +77,8 @@ layout = html.Div([
                  style={
                      'width': '20%',
                      'margin': '1%',
-                     'display': 'inline-block'
+                     'display': 'inline-block',
+                     'verticalAlign': 'top'
                  }),
         html.Div(
             [
@@ -91,7 +92,8 @@ layout = html.Div([
             style={
                 'width': '20%',
                 'margin': '1%',
-                'display': 'inline-block'
+                'display': 'inline-block',
+                'verticalAlign': 'top'
             }),
         html.Div(
             [
@@ -105,7 +107,8 @@ layout = html.Div([
             style={
                 'width': '20%',
                 'margin': '1%',
-                'display': 'inline-block'
+                'display': 'inline-block',
+                'verticalAlign': 'top'
             }),
         html.Div(
             [
@@ -119,7 +122,9 @@ layout = html.Div([
             ],
             style={
                 'width': '20%',
-                'margin': '1%'
+                'margin': '1%',
+                'display': 'inline-block',
+                'verticalAlign': 'top'
             })
     ]),
     dcc.Graph(id='indicator-graphic-line'),
@@ -203,6 +208,7 @@ def update_graph(area, building, floor, date):
                 go.Scatter(
                     x=list_time,
                     y=list_count,
+                    name='Occupancy',
                     mode='lines+markers',
                     marker={
                         'size': 15,
@@ -211,7 +217,8 @@ def update_graph(area, building, floor, date):
                             'width': 0.5,
                             'color': 'white'
                         }
-                    })
+                    },
+                    hovertemplate = '<i>Time</i>: %{x}'+'<br><b>Count</b>: %{y}<br>')
             ],
             'layout':
             go.Layout(

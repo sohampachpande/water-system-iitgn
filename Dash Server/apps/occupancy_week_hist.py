@@ -28,7 +28,7 @@ def date_epoch(date_string):
 
 
 def daterange(start_date, end_date):
-    for n in range(int((end_date - start_date).days)):
+    for n in range(int((end_date - start_date).days)+1):
         yield start_date + timedelta(n)
 
 
@@ -37,8 +37,7 @@ from app import app
 dict_area = {
     'AC': 'Academic Area',
     'SH': 'Student Housing',
-    'SFH': 'Faculty Housing',
-    'all': 'all'
+    'SFH': 'Faculty Housing'
 }
 dict_building = {
     'A': 'Aiban',
@@ -46,8 +45,7 @@ dict_building = {
     'C': 'Chimair',
     'D': 'Duven',
     'E': 'Emiet',
-    'F': 'Firpeal',
-    'all':'all'
+    'F': 'Firpeal'
 }
 for i in range(31):
     dict_building.update({'B{}'.format(i): 'Block {}'.format(i)})
@@ -57,17 +55,19 @@ dict_floor = {
     'FF': 'First Floor',
     'SF': 'Second Floor',
     'TF': 'Third Floor',
-    'all':'all'
+    'Ground Floor':'GF',
+    'First Floor':'FF',
+    'Second Floor':'SF',
+    'Third Floor':'TF'
 }
 
 cur = get_dbconn()
 cur.execute('SELECT DISTINCT area from occupancy')
 available_area = list(np.asarray(cur.fetchall())[:, 0])
-available_area.append('all')
 
 layout = html.Div([
     html.Div([
-        html.H1(children='IIT Gandhinagar Occupancy', style={'margin': '1%'}),
+        html.H1(children='IIT Gandhinagar Average Daily Occupancy', style={'margin': '1%'}),
         html.
         P('Please select the area, building, floor and date from dropdown menus',
           style={'margin': '1%'}),
@@ -84,7 +84,8 @@ layout = html.Div([
                  style={
                      'width': '20%',
                      'margin': '1%',
-                     'display': 'inline-block'
+                     'display': 'inline-block',
+                     'verticalAlign': 'top'
                  }),
         html.Div(
             [
@@ -98,28 +99,30 @@ layout = html.Div([
             style={
                 'width': '20%',
                 'margin': '1%',
-                'display': 'inline-block'
+                'display': 'inline-block',
+                'verticalAlign': 'top'
             }),
         html.Div(
             [
                 dcc.Dropdown(
                     id='hist_floor',
                     # options=[{'label': i, 'value': i} for i in available_floor],
-                    placeholder="Select hist_floor",
+                    placeholder="Select Floor",
                     # value='FF'
                 )
             ],
             style={
                 'width': '20%',
                 'margin': '1%',
-                'display': 'inline-block'
+                'display': 'inline-block',
+                'verticalAlign': 'top'
             }),
         html.Div(
             [
                 dcc.DatePickerRange(
                     id='my-date-picker-range',
                     min_date_allowed=dt(2019, 3, 5),
-                    max_date_allowed=dt(2019, 3, 8),
+                    max_date_allowed=dt(2019, 3, 9),
                     initial_visible_month=dt(2019, 3, 3)
                     # date=dt(2019, 3, 3)
                 )
@@ -127,7 +130,8 @@ layout = html.Div([
             style={
                 'width': '15%',
                 'margin': '1%',
-                'display': 'inline-block'
+                'display': 'inline-block',
+                'verticalAlign': 'top'
             })
     ]),
     html.Div([dcc.Graph(id='indicator-graphic-hist')],
@@ -148,7 +152,6 @@ def set_buildings_options(chosen_area):
         'SELECT DISTINCT building FROM occupancy WHERE area = "{}"'.format(
             chosen_area))
     available_building = list(np.asarray(cur.fetchall())[:, 0])
-    available_building.append('all')
     return [{
         'label': dict_building[i],
         'value': i
@@ -164,8 +167,7 @@ def set_floor_options(chosen_building):
         'SELECT DISTINCT floor FROM occupancy WHERE building = "{}"'.format(
             chosen_building))
     available_floor = list(np.asarray(cur.fetchall())[:, 0])
-    available_floor.append('all')
-    return [{'label': i, 'value': i} for i in available_floor]
+    return [{'label': i, 'value': dict_floor[i]} for i in available_floor]
 
 
 
@@ -191,40 +193,32 @@ def update_graph(area, building, floor, start_date, end_date):
             date_string = single_date.strftime("%Y-%m-%d")
             # date_string = date.strftime('%Y-%m-%d')
             start_epoch, end_epoch = date_epoch(date_string)
-            print(start_epoch, end_epoch)
-            if (area == 'All'):
+            if (area == 'all'):
                 cur.execute("SELECT count FROM occupancy WHERE timeEpoch>='{}' AND timeEpoch<'{}'".format(start_epoch, end_epoch))
                 np_count = np.asarray(cur.fetchall())
-            elif (building == 'All'):
+            elif (building == 'all'):
                 cur.execute("SELECT count FROM occupancy WHERE area = '{}' AND timeEpoch>='{}' AND timeEpoch<'{}'".format(area, start_epoch, end_epoch))
                 np_count = np.asarray(cur.fetchall())
-            elif (floor == 'All'):
+            elif (floor == 'all'):
                 cur.execute("SELECT count FROM occupancy WHERE area = '{}' AND building = '{}' AND timeEpoch>='{}' AND timeEpoch<'{}'".format(area, building, start_epoch, end_epoch))
                 np_count = np.asarray(cur.fetchall())
             else:
-                print('Hi')
-                print(date_string)
-                cur.execute("SELECT count FROM occupancy WHERE area = '{}' AND building = '{}' AND floor = '{}' AND timeEpoch>='{}' AND timeEpoch<'{}'".format(area, building, floor, start_epoch, end_epoch))
+                cur.execute("SELECT count FROM occupancy WHERE area = '{}' AND building = '{}' AND floor = '{}' AND timeEpoch>='{}' AND timeEpoch<'{}'".format(area, building, dict_floor[floor], start_epoch, end_epoch))
                 np_count = np.asarray(cur.fetchall())
 
             count = np_count.mean(axis=0)[0]
             dict_count[date_string] = count
 
+            print(dict_count)
+
         return {
             'data': [
-                go.Scatter(
+                go.Bar(
                     x=list(dict_count.keys()),
                     y=list(dict_count.values()),
                     # text=list_time,
-                    mode='lines+markers',
-                    marker={
-                        'size': 15,
-                        'opacity': 0.5,
-                        'line': {
-                            'width': 0.5,
-                            'color': 'white'
-                        }
-                    })
+                    name='Occupancy',
+                    hovertemplate = '<i>Time</i>: %{x}'+'<br><b>Count</b>: %{y}<br>')
             ],
             'layout':
             go.Layout(

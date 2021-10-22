@@ -40,8 +40,8 @@ layout = html.Div([
             children='IIT Gandhinagar Water Network - Daily Consumption',
             style={'margin-left': '1%'}),
         html.P(
-            'Please select water station from dropdown menus',
-            style={'margin-left': '1%'}),
+            'Please select Water Station and Flow type you want to monitor from the dropdown menus',
+            style={'margin-left': '1%','margin-top' : '1%'}),
         html.Div([
             dcc.Dropdown(
                 id='station',
@@ -53,6 +53,7 @@ layout = html.Div([
             )
         ],
                  style={
+                    'verticalAlign': 'top',
                      'width': '20%',
                      'margin-left': '1%',
                      'display': 'inline-block'
@@ -68,7 +69,8 @@ layout = html.Div([
             )
         ],
                  style={
-                     'width': '20%',
+                    'verticalAlign': 'top',
+                     'width': '10%',
                      'margin-left': '1%',
                      'display': 'inline-block'
                  }),
@@ -83,8 +85,9 @@ layout = html.Div([
                 )
             ],
             style={
-                'width': '20%',
-                'margin-left': '1%'
+                'verticalAlign': 'top',
+                'width': '10%',
+                'margin-left': '1%',
             })
     ]),
     html.Div([dcc.Graph(id='indicator-graphic')], style={'width': '90%'}),
@@ -104,7 +107,6 @@ def update_graph(station, flow_type, date):
     if date is not None:
         conn = sqlite3.connect('water_data.db')
         cursor = conn.cursor()
-        print(date)
 
         date_string = date
 
@@ -159,43 +161,51 @@ def update_graph(station, flow_type, date):
                             x=list_time,
                             y=downsample(np_flow_cwps[:, 1], sampling_f),
                             name='CWPS Current Flow',
+                            hovertemplate = '<i>Time</i>: %{x}'+'<br><b>Flow</b>: %{y}<br>'
                         ),
                         go.Scatter(
                             x=list_time,
                             y=downsample(np_flow_cwps[:, 2], sampling_f),
                             name='CWPS Daily Flow',
+                            hovertemplate = '<i>Time</i>: %{x}'+'<br><b>Flow</b>: %{y}<br>'
                         ),
                         go.Scatter(
                             x=list_time,
                             y=downsample(np_flow_wsc1_rw[:, 1], sampling_f),
                             name='WSC-1-Recycle Current Flow',
+                            hovertemplate = '<i>Time</i>: %{x}'+'<br><b>Flow</b>: %{y}<br>'
                         ),
                         go.Scatter(
                             x=list_time,
                             y=downsample(np_flow_wsc1_rw[:, 2], sampling_f),
                             name='WSC-1-Recycle Daily Flow',
+                            hovertemplate = '<i>Time</i>: %{x}'+'<br><b>Flow</b>: %{y}<br>'
                         ),
                         go.Scatter(
                             x=list_time,
                             y=downsample(np_flow_wsc1_rw[:, 1], sampling_f) +
                             downsample(np_flow_wsc1_fw[:, 1], sampling_f),
                             name='WSC-1 Fresh+Recycle Current Flow',
+                            hovertemplate = '<i>Time</i>: %{x}'+'<br><b>Flow</b>: %{y}<br>'
                         ),
                         go.Scatter(
                             x=list_time,
                             y=downsample(np_flow_wsc1_rw[:, 2], sampling_f) +
                             downsample(np_flow_wsc1_fw[:, 2], sampling_f),
                             name='WSC-1 Fresh+Recycle Daily Flow',
+                            hovertemplate = '<i>Time</i>: %{x}'+'<br><b>Flow</b>: %{y}<br>'
                         ),
                         go.Scatter(
                             x=list_time,
                             y=downsample(np_flow_wsc1_fw[:, 1], sampling_f),
                             name='WSC-1-Fresh Current Flow',
+                            hovertemplate = '<i>Time</i>: %{x}'+'<br><b>Flow</b>: %{y}<br>'
                         ),
                         go.Scatter(
                             x=list_time,
                             y=downsample(np_flow_wsc1_fw[:, 2], sampling_f),
                             name='WSC-1-Fresh Daily Flow',
+                            hovertemplate = '<i>Time</i>: %{x}'+'<br><b>Flow</b>: %{y}<br>'
                         )
                     ],
                     'layout':
@@ -213,22 +223,26 @@ def update_graph(station, flow_type, date):
                             x=list_time,
                             y=downsample(np_flow_cwps[:, 1], sampling_f),
                             name='CWPS Current Flow',
+                            hovertemplate = '<i>Time</i>: %{x}'+'<br><b>Flow</b>: %{y}<br>'
                         ),
                         go.Scatter(
                             x=list_time,
                             y=downsample(np_flow_wsc1_rw[:, 1], sampling_f),
                             name='WSC-1-Recycle Current Flow',
+                            hovertemplate = '<i>Time</i>: %{x}'+'<br><b>Flow</b>: %{y}<br>'
                         ),
                         go.Scatter(
                             x=list_time,
                             y=downsample(np_flow_wsc1_rw[:, 1], sampling_f) +
                             downsample(np_flow_wsc1_fw[:, 1], sampling_f),
                             name='WSC-1 Fresh+Recycle Current Flow',
+                            hovertemplate = '<i>Time</i>: %{x}'+'<br><b>Flow</b>: %{y}<br>'
                         ),
                         go.Scatter(
                             x=list_time,
                             y=downsample(np_flow_wsc1_fw[:, 1], sampling_f),
                             name='WSC-1-Fresh Current Flow',
+                            hovertemplate = '<i>Time</i>: %{x}'+'<br><b>Flow</b>: %{y}<br>'
                         ),
                     ],
                     'layout':
@@ -247,22 +261,26 @@ def update_graph(station, flow_type, date):
                             x=list_time,
                             y=downsample(np_flow_cwps[:, 2], sampling_f),
                             name='CWPS Daily Flow',
+                            hovertemplate = '<i>Time</i>: %{x}'+'<br><b>Flow</b>: %{y}<br>'
                         ),
                         go.Scatter(
                             x=list_time,
                             y=downsample(np_flow_wsc1_rw[:, 2], sampling_f),
                             name='WSC-1-Recycle Daily Flow',
+                            hovertemplate = '<i>Time</i>: %{x}'+'<br><b>Flow</b>: %{y}<br>'
                         ),
                         go.Scatter(
                             x=list_time,
                             y=downsample(np_flow_wsc1_rw[:, 2], sampling_f) +
                             downsample(np_flow_wsc1_fw[:, 2], sampling_f),
                             name='WSC-1 Fresh+Recycle Daily Flow',
+                            hovertemplate = '<i>Time</i>: %{x}'+'<br><b>Flow</b>: %{y}<br>'
                         ),
                         go.Scatter(
                             x=list_time,
                             y=downsample(np_flow_wsc1_fw[:, 2], sampling_f),
                             name='WSC-1-Fresh Daily Flow',
+                            hovertemplate = '<i>Time</i>: %{x}'+'<br><b>Flow</b>: %{y}<br>'
                         )
                     ],
                     'layout':
@@ -293,7 +311,8 @@ def update_graph(station, flow_type, date):
                                 'width': 0.1,
                                 'color': 'white'
                             }
-                        }),
+                        },
+                        hovertemplate = '<i>Time</i>: %{x}'+'<br><b>Flow</b>: %{y}<br>'),
                     go.Scatter(
                         x=list_time,
                         y=downsample(np_flow[:, 2], sampling_f),
@@ -306,7 +325,8 @@ def update_graph(station, flow_type, date):
                                 'width': 0.1,
                                 'color': 'white'
                             }
-                        })
+                        },
+                        hovertemplate = '<i>Time</i>: %{x}'+'<br><b>Flow</b>: %{y}<br>')
                 ],
                 'layout':
                 go.Layout(
