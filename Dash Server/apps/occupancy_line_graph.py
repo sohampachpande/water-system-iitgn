@@ -60,7 +60,7 @@ available_area = np.asarray(cur.fetchall())[:, 0]
 
 layout = html.Div([
     html.Div([
-        html.H1(children='IIT Gandhinagar Occupancy', style={'margin': '1%'}),
+        html.H1(children='IIT Gandhinagar Occupancy - Line Graph', style={'margin': '1%'}),
         html.
         P('Please select the area, building, floor and date from dropdown menus',
           style={'margin': '1%'}),

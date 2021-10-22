@@ -67,7 +67,7 @@ available_area = list(np.asarray(cur.fetchall())[:, 0])
 
 layout = html.Div([
     html.Div([
-        html.H1(children='IIT Gandhinagar Average Daily Occupancy', style={'margin': '1%'}),
+        html.H1(children='IIT Gandhinagar Occupancy - Average Daily Occupancy', style={'margin': '1%'}),
         html.
         P('Please select the area, building, floor and date from dropdown menus',
           style={'margin': '1%'}),

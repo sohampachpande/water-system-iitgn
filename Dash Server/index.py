@@ -25,13 +25,13 @@ index_page = html.Div([
     html.Br(),
     
     html.H3(
-        children='IIT Gandhinagar Occupancy - Histograms',
+        children='IIT Gandhinagar Occupancy - Bar Graphs',
         style={'margin': '1%'}),
     html.
-    P('IIT Gandhinagar has a robust Wireless network. We derive Occupancy details anonymously using logs from the network. Histograms would give a good understanding on occupancy patterns',
+    P('IIT Gandhinagar has a robust Wireless network. We derive Occupancy details anonymously using logs from the network. Bar Graphs would give a good understanding on occupancy patterns',
       style={'margin': '1%'}),
     html.Div([dcc.Link(
-            'Navigate to Occupancy Analysis- Histograms',
+            'Navigate to Occupancy Analysis- Bar Graphs',
             href='/OccupancyWeeklyHistogram')],style={'margin': '1%'}),
     html.Br(),
     

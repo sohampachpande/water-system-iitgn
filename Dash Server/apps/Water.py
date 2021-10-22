@@ -88,6 +88,7 @@ layout = html.Div([
                 'verticalAlign': 'top',
                 'width': '10%',
                 'margin-left': '1%',
+                'display': 'inline-block'
             })
     ]),
     html.Div([dcc.Graph(id='indicator-graphic')], style={'width': '90%'}),
@@ -161,57 +162,57 @@ def update_graph(station, flow_type, date):
                             x=list_time,
                             y=downsample(np_flow_cwps[:, 1], sampling_f),
                             name='CWPS Current Flow',
-                            hovertemplate = '<i>Time</i>: %{x}'+'<br><b>Flow</b>: %{y}<br>'
+                            hovertemplate = '<i>Time</i>: %{x}'+'<br><b>Flow</b>: %{y} cubic meters<br>'
                         ),
                         go.Scatter(
                             x=list_time,
                             y=downsample(np_flow_cwps[:, 2], sampling_f),
                             name='CWPS Daily Flow',
-                            hovertemplate = '<i>Time</i>: %{x}'+'<br><b>Flow</b>: %{y}<br>'
+                            hovertemplate = '<i>Time</i>: %{x}'+'<br><b>Flow</b>: %{y} cubic meters<br>'
                         ),
                         go.Scatter(
                             x=list_time,
                             y=downsample(np_flow_wsc1_rw[:, 1], sampling_f),
                             name='WSC-1-Recycle Current Flow',
-                            hovertemplate = '<i>Time</i>: %{x}'+'<br><b>Flow</b>: %{y}<br>'
+                            hovertemplate = '<i>Time</i>: %{x}'+'<br><b>Flow</b>: %{y} cubic meters<br>'
                         ),
                         go.Scatter(
                             x=list_time,
                             y=downsample(np_flow_wsc1_rw[:, 2], sampling_f),
                             name='WSC-1-Recycle Daily Flow',
-                            hovertemplate = '<i>Time</i>: %{x}'+'<br><b>Flow</b>: %{y}<br>'
+                            hovertemplate = '<i>Time</i>: %{x}'+'<br><b>Flow</b>: %{y} cubic meters<br>'
                         ),
                         go.Scatter(
                             x=list_time,
                             y=downsample(np_flow_wsc1_rw[:, 1], sampling_f) +
                             downsample(np_flow_wsc1_fw[:, 1], sampling_f),
                             name='WSC-1 Fresh+Recycle Current Flow',
-                            hovertemplate = '<i>Time</i>: %{x}'+'<br><b>Flow</b>: %{y}<br>'
+                            hovertemplate = '<i>Time</i>: %{x}'+'<br><b>Flow</b>: %{y} cubic meters<br>'
                         ),
                         go.Scatter(
                             x=list_time,
                             y=downsample(np_flow_wsc1_rw[:, 2], sampling_f) +
                             downsample(np_flow_wsc1_fw[:, 2], sampling_f),
                             name='WSC-1 Fresh+Recycle Daily Flow',
-                            hovertemplate = '<i>Time</i>: %{x}'+'<br><b>Flow</b>: %{y}<br>'
+                            hovertemplate = '<i>Time</i>: %{x}'+'<br><b>Flow</b>: %{y} cubic meters<br>'
                         ),
                         go.Scatter(
                             x=list_time,
                             y=downsample(np_flow_wsc1_fw[:, 1], sampling_f),
                             name='WSC-1-Fresh Current Flow',
-                            hovertemplate = '<i>Time</i>: %{x}'+'<br><b>Flow</b>: %{y}<br>'
+                            hovertemplate = '<i>Time</i>: %{x}'+'<br><b>Flow</b>: %{y} cubic meters<br>'
                         ),
                         go.Scatter(
                             x=list_time,
                             y=downsample(np_flow_wsc1_fw[:, 2], sampling_f),
                             name='WSC-1-Fresh Daily Flow',
-                            hovertemplate = '<i>Time</i>: %{x}'+'<br><b>Flow</b>: %{y}<br>'
+                            hovertemplate = '<i>Time</i>: %{x}'+'<br><b>Flow</b>: %{y} cubic meters<br>'
                         )
                     ],
                     'layout':
                     go.Layout(
                         xaxis={'title': 'Time'},
-                        yaxis={'title': 'Flow'},
+                        yaxis={'title': 'Flow(cubic meter)'},
                         # margin={'l': 50, 'b': 100, 't': 100, 'r': 50},
                         height=700,
                         hovermode='closest')
@@ -223,32 +224,32 @@ def update_graph(station, flow_type, date):
                             x=list_time,
                             y=downsample(np_flow_cwps[:, 1], sampling_f),
                             name='CWPS Current Flow',
-                            hovertemplate = '<i>Time</i>: %{x}'+'<br><b>Flow</b>: %{y}<br>'
+                            hovertemplate = '<i>Time</i>: %{x}'+'<br><b>Flow</b>: %{y} cubic meters<br>'
                         ),
                         go.Scatter(
                             x=list_time,
                             y=downsample(np_flow_wsc1_rw[:, 1], sampling_f),
                             name='WSC-1-Recycle Current Flow',
-                            hovertemplate = '<i>Time</i>: %{x}'+'<br><b>Flow</b>: %{y}<br>'
+                            hovertemplate = '<i>Time</i>: %{x}'+'<br><b>Flow</b>: %{y} cubic meters<br>'
                         ),
                         go.Scatter(
                             x=list_time,
                             y=downsample(np_flow_wsc1_rw[:, 1], sampling_f) +
                             downsample(np_flow_wsc1_fw[:, 1], sampling_f),
                             name='WSC-1 Fresh+Recycle Current Flow',
-                            hovertemplate = '<i>Time</i>: %{x}'+'<br><b>Flow</b>: %{y}<br>'
+                            hovertemplate = '<i>Time</i>: %{x}'+'<br><b>Flow</b>: %{y} cubic meters<br>'
                         ),
                         go.Scatter(
                             x=list_time,
                             y=downsample(np_flow_wsc1_fw[:, 1], sampling_f),
                             name='WSC-1-Fresh Current Flow',
-                            hovertemplate = '<i>Time</i>: %{x}'+'<br><b>Flow</b>: %{y}<br>'
+                            hovertemplate = '<i>Time</i>: %{x}'+'<br><b>Flow</b>: %{y} cubic meters<br>'
                         ),
                     ],
                     'layout':
                     go.Layout(
                         xaxis={'title': 'Time'},
-                        yaxis={'title': 'Flow'},
+                        yaxis={'title': 'Flow(cubic meter)'},
                         # margin={'l': 50, 'b': 100, 't': 100, 'r': 50},
                         height=700,
                         hovermode='closest')
@@ -261,32 +262,32 @@ def update_graph(station, flow_type, date):
                             x=list_time,
                             y=downsample(np_flow_cwps[:, 2], sampling_f),
                             name='CWPS Daily Flow',
-                            hovertemplate = '<i>Time</i>: %{x}'+'<br><b>Flow</b>: %{y}<br>'
+                            hovertemplate = '<i>Time</i>: %{x}'+'<br><b>Flow</b>: %{y} cubic meters<br>'
                         ),
                         go.Scatter(
                             x=list_time,
                             y=downsample(np_flow_wsc1_rw[:, 2], sampling_f),
                             name='WSC-1-Recycle Daily Flow',
-                            hovertemplate = '<i>Time</i>: %{x}'+'<br><b>Flow</b>: %{y}<br>'
+                            hovertemplate = '<i>Time</i>: %{x}'+'<br><b>Flow</b>: %{y} cubic meters<br>'
                         ),
                         go.Scatter(
                             x=list_time,
                             y=downsample(np_flow_wsc1_rw[:, 2], sampling_f) +
                             downsample(np_flow_wsc1_fw[:, 2], sampling_f),
                             name='WSC-1 Fresh+Recycle Daily Flow',
-                            hovertemplate = '<i>Time</i>: %{x}'+'<br><b>Flow</b>: %{y}<br>'
+                            hovertemplate = '<i>Time</i>: %{x}'+'<br><b>Flow</b>: %{y} cubic meters<br>'
                         ),
                         go.Scatter(
                             x=list_time,
                             y=downsample(np_flow_wsc1_fw[:, 2], sampling_f),
                             name='WSC-1-Fresh Daily Flow',
-                            hovertemplate = '<i>Time</i>: %{x}'+'<br><b>Flow</b>: %{y}<br>'
+                            hovertemplate = '<i>Time</i>: %{x}'+'<br><b>Flow</b>: %{y} cubic meters<br>'
                         )
                     ],
                     'layout':
                     go.Layout(
                         xaxis={'title': 'Time'},
-                        yaxis={'title': 'Flow'},
+                        yaxis={'title': 'Flow(cubic meter)'},
                         # margin={'l': 50, 'b': 100, 't': 100, 'r': 50},
                         height=700,
                         hovermode='closest')
@@ -312,7 +313,7 @@ def update_graph(station, flow_type, date):
                                 'color': 'white'
                             }
                         },
-                        hovertemplate = '<i>Time</i>: %{x}'+'<br><b>Flow</b>: %{y}<br>'),
+                        hovertemplate = '<i>Time</i>: %{x}'+'<br><b>Flow</b>: %{y} cubic meters<br>'),
                     go.Scatter(
                         x=list_time,
                         y=downsample(np_flow[:, 2], sampling_f),
@@ -326,12 +327,12 @@ def update_graph(station, flow_type, date):
                                 'color': 'white'
                             }
                         },
-                        hovertemplate = '<i>Time</i>: %{x}'+'<br><b>Flow</b>: %{y}<br>')
+                        hovertemplate = '<i>Time</i>: %{x}'+'<br><b>Flow</b>: %{y} cubic meters<br>')
                 ],
                 'layout':
                 go.Layout(
                     xaxis={'title': 'Time'},
-                    yaxis={'title': 'Flow'},
+                    yaxis={'title': 'Flow(cubic meter)'},
                     # margin={'l': 50, 'b': 100, 't': 100, 'r': 50},
                     height=700,
                     hovermode='closest')
