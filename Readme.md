@@ -2,7 +2,7 @@
 
 ## Project contains code for 
 1. Data collection from Water sensors and Wifi Logs
-2. Web server for visualising Water Flow and Occupancy at IIT Gandhinagar 
+2. Web server for visualising Water Flow and Occupancy at IIT Gandhinagarusing Plotly and Dash
 
 The repo contains demo data from March 2019 for testing purpose.
 
